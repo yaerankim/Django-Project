@@ -2,7 +2,13 @@ from django.contrib import admin
 from todo_app.models import ToDoItem, ToDoList
 
 # 커스터마이징 class. 상위 모델에서 하위 모델의 설정을 한번에 설정하고자 할 경우
-class ToDoItemInline(admin.StackedInline):
+# 각 객체 추가 방식 1) 하위 모델의 입력해야 할 각 field 다 나열된 방식
+# class ToDoItemInline(admin.StackedInline):
+#     model = ToDoItem
+#     extra = 3
+
+# 각 객체 추가 방식 2) 한눈에 보이도록 축약된 방식
+class ToDoItemInline(admin.TabularInline):
     model = ToDoItem
     extra = 3
 
@@ -20,6 +26,9 @@ class ToDoItemAdmin(admin.ModelAdmin):
         ('Detail', {'fields' : ['title', 'description']}),
         ('Date information', {'fields' : ['due_date']}),
     ]
+    list_display = ('title', 'todo_list', 'due_date')
+    list_filter = ['due_date']
+    search_fields = ['title']
 
 admin.site.register(ToDoList, ToDoListAdmin)
 

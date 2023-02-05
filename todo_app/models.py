@@ -3,6 +3,8 @@ from django.utils import timezone
 from django.db import models
 from django.urls import reverse
 
+from django.contrib import admin
+
 def one_week_hence():
     return timezone.now() + timezone.timedelta(days=7)
 
@@ -21,6 +23,12 @@ class ToDoItem(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     due_date = models.DateTimeField(default=one_week_hence)
     todo_list = models.ForeignKey(ToDoList, on_delete=models.CASCADE)
+
+    @admin.display(
+        boolean=True,
+        ordering='due_date',
+        description='ordering by duration date',
+    )
 
     def get_absolute_url(self):
         return reverse(
